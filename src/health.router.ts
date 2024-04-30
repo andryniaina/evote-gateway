@@ -18,6 +18,9 @@ export const healthRouter = express.Router();
 /*
  * Example of possible health endpoints for use in a cloud environment
  */
+healthRouter.get('/',(req,res)=> {
+  res.status(OK).json({message: "Blockchain API"}) ;
+})
 
 healthRouter.get('/ready', (_req, res: Response) =>
   res.status(OK).json({
