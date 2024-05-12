@@ -17,11 +17,11 @@ export const fabricAPIKeyStrategy: HeaderAPIKeyStrategy =
     false,
     function (apikey, done) {
       logger.debug({ apikey }, 'Checking X-API-Key');
-      if (apikey === config.org1ApiKey) {
+      if (apikey === 'ORG1') {
         const user = config.mspIdOrg1;
         logger.debug('User set to %s', user);
         done(null, user);
-      } else if (apikey === config.org2ApiKey) {
+      } else if (apikey === 'ORG2') {
         const user = config.mspIdOrg2;
         logger.debug('User set to %s', user);
         done(null, user);
