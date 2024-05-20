@@ -14,6 +14,7 @@ import { jobsRouter } from './jobs.router';
 import { logger } from './logger';
 import { transactionsRouter } from './transactions.router';
 import cors from 'cors';
+import { voteRouter } from './vote.router';
 
 const { BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND } = StatusCodes;
 
@@ -62,6 +63,7 @@ export const createServer = async (): Promise<Application> => {
   }
 
   app.use('/', healthRouter);
+  app.use('/vote', authenticateApiKey, voteRouter)
   app.use('/api/assets', authenticateApiKey, assetsRouter);
   app.use('/api/jobs', authenticateApiKey, jobsRouter);
   app.use('/api/transactions', authenticateApiKey, transactionsRouter);
