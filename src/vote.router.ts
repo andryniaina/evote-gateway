@@ -33,6 +33,10 @@ const { ACCEPTED, BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, OK } =
 
 export const voteRouter = express.Router();
 
+voteRouter.get('/info', (req, res) => {
+  res.status(OK).json({ message: 'Vote Endpoint' });
+});
+
 voteRouter.get('/', async (req: Request, res: Response) => {
   logger.debug('Get all votes');
   try {
