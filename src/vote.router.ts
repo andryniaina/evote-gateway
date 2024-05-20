@@ -56,26 +56,26 @@ voteRouter.get('/', async (req: Request, res: Response) => {
 });
 
 voteRouter.get('/stats', async (req: Request, res: Response) => {
-    logger.debug('Get votes stats');
-    try {
-      const mspId = req.user as string;
-      const contract = req.app.locals[mspId]?.assetContract as Contract;
-  
-      const data = await evatuateTransaction(contract, 'GetVoteStatistics');
-      let votes = [];
-      if (data.length > 0) {
-        votes = JSON.parse(data.toString());
-      }
-  
-      return res.status(OK).json(votes);
-    } catch (err) {
-      logger.error({ err }, 'Error processing get all votes stats request');
-      return res.status(INTERNAL_SERVER_ERROR).json({
-        status: getReasonPhrase(INTERNAL_SERVER_ERROR),
-        timestamp: new Date().toISOString(),
-      });
+  logger.debug('Get votes stats');
+  try {
+    const mspId = req.user as string;
+    const contract = req.app.locals[mspId]?.assetContract as Contract;
+
+    const data = await evatuateTransaction(contract, 'GetVoteStatistics');
+    let votes = [];
+    if (data.length > 0) {
+      votes = JSON.parse(data.toString());
     }
-  });
+
+    return res.status(OK).json(votes);
+  } catch (err) {
+    logger.error({ err }, 'Error processing get all votes stats request');
+    return res.status(INTERNAL_SERVER_ERROR).json({
+      status: getReasonPhrase(INTERNAL_SERVER_ERROR),
+      timestamp: new Date().toISOString(),
+    });
+  }
+});
 
 voteRouter.post(
   '/',
@@ -108,7 +108,7 @@ voteRouter.post(
         'RegisterVote',
         assetId,
         req.body.CandidateId,
-        req.body.Station,
+        req.body.Station
       );
 
       return res.status(ACCEPTED).json({
@@ -163,4 +163,3 @@ voteRouter.get('/:assetId', async (req: Request, res: Response) => {
     });
   }
 });
-
