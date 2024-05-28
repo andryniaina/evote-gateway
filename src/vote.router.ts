@@ -135,6 +135,37 @@ voteRouter.post(
   }
 );
 
+voteRouter.delete('/', async (req: Request, res: Response) => {
+  logger.debug('Delete votes request received');
+
+  const mspId = req.user as string;
+
+  try {
+    const submitQueue = req.app.locals.jobq as Queue;
+    const jobId = await addSubmitTransactionJob(
+      submitQueue,
+      mspId,
+      'DeleteAllVotes'
+    );
+
+    return res.status(ACCEPTED).json({
+      status: getReasonPhrase(ACCEPTED),
+      jobId: jobId,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (err) {
+    logger.error(
+      { err },
+      'Error processing votes deletion request for asset ID %s'
+    );
+
+    return res.status(INTERNAL_SERVER_ERROR).json({
+      status: getReasonPhrase(INTERNAL_SERVER_ERROR),
+      timestamp: new Date().toISOString(),
+    });
+  }
+});
+
 voteRouter.get('/:assetId', async (req: Request, res: Response) => {
   const assetId = req.params.assetId;
   logger.debug('Read asset request received for asset ID %s', assetId);
